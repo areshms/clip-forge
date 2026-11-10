@@ -113,8 +113,8 @@ def build_ass(
 def _escape_ass(word: str) -> str:
     """Escape ASS special chars and collapse whitespace."""
     w = re.sub(r"\s+", " ", str(word)).strip()
-    for ch in "\{}*":
-        w = w.replace(ch, "\\" if ch == "\\" else "\\" + ch)
+    for ch in "\\{}*":
+        w = w.replace(ch, "\\\\" if ch == "\\" else "\\" + ch)
     return w
 
 
