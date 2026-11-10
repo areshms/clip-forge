@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+work/
+out/
+*.m4a
+*.mp4
+*.wav
+*.srt
+*.ass
+*.json
+!config/*.json
+.DS_Store
