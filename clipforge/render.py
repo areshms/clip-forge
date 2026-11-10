@@ -251,10 +251,12 @@ def render_clip(
     )
 
     t0 = time.perf_counter()
+    af = f"loudnorm=I={config.LOUDNORM_I}:TP={config.LOUDNORM_TP}"
     util.run([
         config.FFMPEG, "-y", "-hide_banner", "-loglevel", "error",
         "-ss", f"{offset:.3f}", "-t", f"{clip_dur:.3f}", "-i", str(src),
         "-vf", "".join(vf),
+        "-af", af,
         "-c:v", "libx264", "-preset", config.PRESET, "-crf", str(config.CRF),
         "-pix_fmt", "yuv420p",
         "-r", str(config.FPS_OUT),
