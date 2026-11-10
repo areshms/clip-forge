@@ -22,9 +22,23 @@ def _env_path(name: str, default: str) -> Path:
 FFMPEG = _env_path(
     "CLIPFORGE_FFMPEG", str(HOME / ".hermes/tools/ffmpeg-9.0.1-darwin-arm64/ffmpeg")
 )
-FFPROBE = _env_path(
-    "CLIPFORGE_FFPROBE", str(HOME / ".hermes/tools/ffmpeg-9.0.1-darwin-arm64/ffprobe")
-)
+def _resolve_ffprobe() -> Path:
+    """The static 9.0.1 bundle ships *only* `ffmpeg` (verified: no sibling ffprobe).
+
+    Homebrew's ffprobe 8.1 is fine for *probing* -- the libass gap only affects
+    encoding filters -- so fall back to it rather than failing.
+    """
+    explicit = os.environ.get("CLIPFORGE_FFPROBE")
+    if explicit:
+        return Path(explicit).expanduser()
+    sibling = HOME / ".hermes/tools/ffmpeg-9.0.1-darwin-arm64/ffprobe"
+    if sibling.exists():
+        return sibling
+    found = shutil.which("ffprobe")
+    return Path(found) if found else sibling
+
+
+FFPROBE = _resolve_ffprobe()
 YTDLP = _env_path("CLIPFORGE_YTDLP", shutil.which("yt-dlp") or "/opt/homebrew/bin/yt-dlp")
 PYTHON = _env_path(
     "CLIPFORGE_PYTHON", str(HOME / ".hermes/tools/clipforge-venv/bin/python")
