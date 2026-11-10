@@ -41,7 +41,7 @@ def _resolve_ffprobe() -> Path:
 FFPROBE = _resolve_ffprobe()
 YTDLP = _env_path("CLIPFORGE_YTDLP", shutil.which("yt-dlp") or "/opt/homebrew/bin/yt-dlp")
 PYTHON = _env_path(
-    "CLIPFORGE_PYTHON", str(Path(__file__).resolve().parents[2] / ".venv" / "bin" / "python")
+    "CLIPFORGE_PYTHON", str(HOME / ".hermes" / "tools" / "clipforge-venv" / "bin" / "python")
 )
 
 # --- output geometry ---
