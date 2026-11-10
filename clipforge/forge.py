@@ -17,6 +17,7 @@ from pathlib import Path
 
 from PIL import Image
 
+from . import __version__
 from . import config, cut, ingest, render, score, transcribe, util
 from .util import log
 
@@ -85,7 +86,7 @@ def run(
 
     util.setup_logging(verbose)
     config.require_ffmpeg()
-    log.info("clip-forge v%s | ffmpeg=%s | dry_run=%s", config.__version__, config.FFMPEG, dry_run)
+    log.info("clip-forge v%s | ffmpeg=%s | dry_run=%s", __version__, config.FFMPEG, dry_run)
 
     # 1) ingest + transcribe (cached unless --force)
     t0 = time.perf_counter()
