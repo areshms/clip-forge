@@ -110,6 +110,7 @@ def run(
                                     audio=wav, use_chat=True, force=force)
     timings["score_s"] = round(time.perf_counter() - t0, 2)
     windows = scored["clips"]
+    manifest["n_selected"] = len(windows)
     manifest["scoring"] = {
         "duration_s": scored["duration_s"],
         "signals": scored["signals"],
