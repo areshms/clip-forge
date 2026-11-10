@@ -273,8 +273,10 @@ def render_clip(
         "reframe_mode": reframe_mode,
     })
     if verbose:
+        w = m.get("w") or 0
+        h = m.get("h") or 0
         log.info("render %s -> %s (%dx%d, %.2fs, %.2fs wall)",
-                 src.name, out.name, m.get("w"), m.get("h"), m["duration_s"], dt)
+                 src.name, out.name, w, h, m["duration_s"], dt)
     return m
 
 

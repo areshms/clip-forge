@@ -32,10 +32,9 @@ def _make_contact_sheet(clips: list[Path], out: Path, cols: int = 3) -> Path:
         mid = Path(str(c).replace(".mp4", "_midframe.png"))
         util.run([
             config.FFMPEG, "-y", "-hide_banner", "-loglevel", "error",
-            "-ss", "3", "-i", str(c), "-vf", "select=eq(n\\,0)", "-frames:v", "1",
-            "-update", "1", str(mid),
+            "-ss", "3", "-i", str(c), "-frames:v", "1", "-update", "1", str(mid),
         ], timeout=60)
-        if mid.exists():
+        if mid.exists() and mid.stat().st_size > 0:
             frames.append(Image.open(mid).convert("RGB"))
             mid.unlink(missing_ok=True)
     if not frames:
@@ -144,7 +143,8 @@ def run(
 
         # download exact section; if yt-dlp returns something longer, cut it
         downloaded = ingest.download_segment(url, w["start"], w["end"], seg_raw)
-        cut_res = cut.cut_segment(downloaded, w["start"], w["duration"], seg_cut,
+        # downloaded segment starts at 0 (relative), so cut from 0
+        cut_res = cut.cut_segment(downloaded, 0.0, w["duration"], seg_cut,
                                   tail=0.6, verbose=verbose)
 
         final = outdir / f"clip_{i:02d}.mp4"
