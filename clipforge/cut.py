@@ -103,7 +103,7 @@ def cut_segment(
             "-c", "copy", "-avoid_negative_ts", "make_zero",
             "-movflags", "+faststart", str(out),
         ], timeout=1800)
-        meta = {"mode": "copy", "keyframe": round(kf, 3), "offset": round(offset, 3)}
+        meta = {"mode": "copy", "keyframe": round(kf, 3), "actual_start": round(kf, 3), "offset": round(offset, 3)}
 
     m = util.media_summary(out)
     res = {
