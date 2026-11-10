@@ -246,8 +246,7 @@ def render_clip(
     vf = (
         f"crop={crop_w}:{crop_h}:{x}:{y},"
         f"scale={config.OUT_W}:{config.OUT_H}:flags=lanczos,"
-        f"ass={_ffmpeg_escape(str(ass_path))},"
-        f"loudnorm=I={config.LOUDNORM_I}:TP={config.LOUDNORM_TP}"
+        f"ass={_ffmpeg_escape(str(ass_path))}"
     )
 
     t0 = time.perf_counter()
