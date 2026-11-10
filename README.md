@@ -1,34 +1,22 @@
 # clip-forge
 
-Local **stream VOD → N ranked vertical captioned clips** pipeline.
-The everygen/Klap/Opus replacement for Lane 1 of the GTA6 playbook (see `~/projects/gta6-playbook/PRIME_BRIEF.md` §6).
+Local, $0-marginal-cost creator clip-service pipeline.
 
-**Marginal cost per clip: $0.00.** Everything runs on this M4.
+Paste a Twitch/YouTube VOD URL → N ranked 9:16 vertical clips with burned ASS captions.
 
-## Components (each independently smoke-testable)
+## Pipeline stages
 
-| module | job | smoke test |
-|---|---|---|
-| `clipforge/transcribe.py` | yt-dlp audio-only → faster-whisper `base` float32 (10 threads, VAD, word timestamps) → `transcript.json` | `tests/smoke_transcribe.py` |
-| `clipforge/score.py` | `0.5·transcript-heuristic + 0.3·ebur128/astats audio energy + 0.2·chat spikes` → top-N non-overlapping **25–45 s hook-first** windows | `tests/smoke_score.py` |
-| `clipforge/cut.py` | ffmpeg **stream-copy** cuts (no re-encode) | `tests/smoke_cut.py` |
-| `clipforge/render.py` | pinned ffmpeg 9.0.1: **1080×1920 reframe + burned ASS captions** from whisper segments + loudnorm + contact sheet | `tests/smoke_render.py` |
-| `clipforge/forge.py` | orchestrator, `--dry-run`, cache + state | `--dry-run` |
+1. `ingest.py` / `transcribe.py` — yt-dlp audio-only + faster-whisper base word timestamps → JSON
+2. `score.py` — LLM transcript + audio energy + chat spikes → top-N non-overlapping 25–45 s windows
+3. `cut.py` — ffmpeg stream-copy per window
+4. `render.py` — pinned static ffmpeg 9.0.1: 1080×1920 reframe + burned ASS captions
+5. `forge.py` — orchestrator with `--dry-run`
 
-## Hard requirements (verified, do not "fix")
+## Verified environment
 
-* **ffmpeg must be the static 9.0.1 build** — `~/.hermes/tools/ffmpeg-9.0.1-darwin-arm64/ffmpeg`.
-  Homebrew ffmpeg 8.1 has **no libass/drawtext/subtitles**; caption burn silently fails there.
-  `config.py` probes `-h filter=ass` and refuses a build without it.
-* Python: `~/.hermes/tools/clipforge-venv/bin/python` (faster-whisper 1.1.0).
-* `cv2`/`mediapipe` are **optional**: reframe degrades to centre-crop when absent.
+- macOS 26.5.1, Apple M4, 16 GB RAM
+- `~/.hermes/tools/ffmpeg-9.0.1-darwin-arm64/ffmpeg` (libass/drawtext/ass enabled)
+- faster-whisper 1.1.0 / ctranslate2 4.7.1 (MPT venv or `~/.hermes/tools/clipforge-venv`)
+- Measured: 2 h VOD transcript ≈ 9 min; 35 s clip render ≈ 4 s
 
-## Use
-
-```bash
-PY=~/.hermes/tools/clipforge-venv/bin/python
-$PY -m clipforge.forge --url "<YouTube VOD URL>" --n 10 --out /tmp/clipforge/out
-$PY -m clipforge.forge --url "<URL>" --n 10 --dry-run      # plan only, no download/render
-```
-
-See `BUILD_REPORT.md` for measured timings and known gaps, `RESUME.md` for handoff.
+See BUILD_REPORT.md for the v0 run.

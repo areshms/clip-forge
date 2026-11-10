@@ -1,0 +1,5 @@
+faster-whisper==1.1.0
+yt-dlp
+chat-downloader
+opencv-python-headless==4.8.1.78
+mediapipe

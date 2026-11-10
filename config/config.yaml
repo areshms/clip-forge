@@ -1,0 +1,38 @@
+# ClipForge configuration
+project_root: /Users/ares.hmsgmail.com/projects/clip-forge
+venv_path: /Users/ares.hmsgmail.com/projects/clip-forge/.venv/bin/python
+
+# Paths
+storage_dir: /Users/ares.hmsgmail.com/projects/clip-forge/storage
+cache_dir: /Users/ares.hmsgmail.com/projects/clip-forge/storage/cache
+out_dir: /Users/ares.hmsgmail.com/projects/clip-forge/storage/out
+
+# FFmpeg
+ffmpeg_path: /Users/ares.hmsgmail.com/.hermes/tools/ffmpeg-9.0.1-darwin-arm64/ffmpeg
+
+# Whisper
+whisper_model: base
+whisper_compute_type: float32
+whisper_cpu_threads: 10
+whisper_word_timestamps: true
+whisper_vad: true
+
+# Scoring
+score_weights:
+  transcript_heuristic: 0.5
+  audio_energy: 0.3
+  chat_spike: 0.2
+
+# Clip parameters
+min_clip_duration: 20
+max_clip_duration: 45
+hook_first: true
+
+# Output
+output_format: mp4
+video_width: 1080
+video_height: 1920
+aspect_ratio: 9:16
+
+# Logging
+log_level: INFO
