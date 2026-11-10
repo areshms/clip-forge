@@ -279,7 +279,7 @@ def render_clip(
 
 def _ffmpeg_escape(path: str) -> str:
     """ASS file path may contain chars that need escaping in filtergraph."""
-    return path.replace("\\", "/").replace("\", "/").replace(":", "\\:")
+    return path.replace("\\", "/").replace("\\", "/").replace(":", "\\:")
 
 
 # --------------------------------------------------------------------------- #
