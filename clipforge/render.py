@@ -107,9 +107,7 @@ def build_ass(
         events.append(
             f"Dialogue: 0,{_ass_time(start)},{_ass_time(end)},Default,,0,0,0,,{text}"
         )
-    return header + "
-".join(events) + "
-"
+    return header + "\n".join(events) + "\n"
 
 
 def _escape_ass(word: str) -> str:
@@ -256,7 +254,7 @@ def render_clip(
     util.run([
         config.FFMPEG, "-y", "-hide_banner", "-loglevel", "error",
         "-ss", f"{offset:.3f}", "-t", f"{clip_dur:.3f}", "-i", str(src),
-        "-vf", vf,
+        "-vf", "".join(vf),
         "-c:v", "libx264", "-preset", config.PRESET, "-crf", str(config.CRF),
         "-pix_fmt", "yuv420p",
         "-r", str(config.FPS_OUT),
